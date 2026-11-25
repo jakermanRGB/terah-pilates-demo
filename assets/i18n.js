@@ -2,7 +2,7 @@ window.I18N = {
   en: {
     "meta.title": "Térah Pilates Studio · Reformer Pilates in Cabo San Lucas",
     "skip": "Skip to content",
-    "demo": "Design proposal for Térah Pilates Studio · private preview",
+    "demo": "Design proposal for Térah Pilates Studio",
     "nav.clases": "Classes",
     "nav.horario": "Schedule",
     "nav.planes": "Pricing",
@@ -10,12 +10,12 @@ window.I18N = {
     "nav.ubicacion": "Location",
     "nav.cta": "Book",
 
-    "hero.eyebrow": "Reformer Pilates · Cabo San Lucas",
+    "hero.eyebrow": "Plaza Master Cardones · Cabo San Lucas",
     "hero.t1": "Four reformers.",
     "hero.t2": "One is yours.",
-    "hero.sub": "45-minute classes, never more than four people, at Plaza Master Cardones. With so few reformers, your coach catches every rep.",
+    "hero.sub": "Reformer Pilates, never more than four people per class.",
     "hero.cta": "Book your trial class",
-    "hero.cta2": "See today's classes",
+    "hero.cta2": "See schedule",
     "hero.stars": "on Google · 49 reviews",
     "hero.tag": "The studio · Lomas del Pacífico",
 

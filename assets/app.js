@@ -17,8 +17,8 @@ const UI = {
     vivo: t => `En vivo desde Fitco · ${t}`, ref: 'Horario de referencia · confirma lugares en Fitco',
     conCoach: c => `con ${c}`,
     sinClases: 'No quedan clases este día. Revisa el siguiente.',
-    proxima: (d, h, f, n) => `Próxima clase con lugar: ${d} ${h} · ${f} · ${n === 1 ? '1 lugar' : n + ' lugares'}`,
-    proximaRef: (d, h, f) => `Próxima clase: ${d} ${h} · ${f}`,
+    proxima: (d, h, f, n) => `Próxima clase: ${d} ${h} · ${n === 1 ? 'queda 1 lugar' : 'quedan ' + n + ' lugares'}`,
+    proximaRef: (d, h, f) => `Próxima clase: ${d} ${h}`,
     clases: n => n === 1 ? '1 clase' : `${n} clases`,
     ilimitado: 'Ilimitado', porClase: p => `${p} por clase`, comprar: 'Comprar',
     abierto: c => `Abierto ahora · cierra a las ${c}`, cerrado: (d, a) => `Cerrado ahora · abre ${d} a las ${a}`,
@@ -34,8 +34,8 @@ const UI = {
     vivo: t => `Live from Fitco · ${t}`, ref: 'Reference schedule · confirm spots on Fitco',
     conCoach: c => `with ${c}`,
     sinClases: 'No classes left today. Check the next day.',
-    proxima: (d, h, f, n) => `Next open class: ${d} ${h} · ${f} · ${n === 1 ? '1 spot' : n + ' spots'}`,
-    proximaRef: (d, h, f) => `Next class: ${d} ${h} · ${f}`,
+    proxima: (d, h, f, n) => `Next class: ${d} ${h} · ${n === 1 ? '1 spot left' : n + ' spots left'}`,
+    proximaRef: (d, h, f) => `Next class: ${d} ${h}`,
     clases: n => n === 1 ? '1 class' : `${n} classes`,
     ilimitado: 'Unlimited', porClase: p => `${p} per class`, comprar: 'Buy',
     abierto: c => `Open now · closes at ${c}`, cerrado: (d, a) => `Closed now · opens ${d} at ${a}`,
@@ -295,12 +295,23 @@ const io = new IntersectionObserver(entries => {
   let k = 0;
   entries.filter(e => e.isIntersecting).forEach(e => {
     const el = e.target;
-    if (!RM.matches) el.style.transitionDelay = (k++ * 90) + 'ms';
+    if (!RM.matches) el.style.transitionDelay = (Math.min(k++, 4) * 90) + 'ms';
     el.classList.add('in'); io.unobserve(el);
     setTimeout(() => { el.style.transitionDelay = ''; }, 1400);
   });
 }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-function observar(list) { list.forEach(el => { if (!el.classList.contains('in')) io.observe(el); }); }
+const pendientes = new Set();
+function observar(list) { list.forEach(el => { if (!el.classList.contains('in')) { io.observe(el); pendientes.add(el); } }); }
+let barrido = null;
+addEventListener('scroll', () => {           /* respaldo: lo que un scroll muy rápido brincó, se muestra igual */
+  clearTimeout(barrido);
+  barrido = setTimeout(() => {
+    for (const el of pendientes) {
+      if (el.classList.contains('in')) { pendientes.delete(el); continue; }
+      if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('in'); io.unobserve(el); pendientes.delete(el); }
+    }
+  }, 120);
+}, { passive: true });
 
 /* ---------- hero: el video del estudio ---------- */
 const GATES = [
